@@ -37,7 +37,7 @@ public class UploadServiceImpl implements IUploadService{
 	@Override
 	public ServiceResult uploadCallService(InputStream input){
 		ServiceResult result=null;
-			List<String> songName=Util.unzip(input);
+			List<String> songName=Util.unZip(input);
 			if(songName.size()==0){
 				result=new ServiceResult();
 				result.setSuccessed(false);
