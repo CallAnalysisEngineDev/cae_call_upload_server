@@ -17,7 +17,7 @@ public class SongDaoImpl implements ISongDao{
 	@Autowired
 	private JdbcTemplate template;
 	@Override
-	public DaoResult updateSongTimeDao(List<String> songNames){
+	public DaoResult updateSongTimeDao(final List<String> songNames){
 		try {
 			String sql="UPDATE song "
 					+ "SET song_last_modify_time = ? "

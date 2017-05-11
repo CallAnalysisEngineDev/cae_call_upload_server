@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.cae.common.Util;
 @Service("uploadService")
 public class UploadServiceImpl implements IUploadService{
-	public static final String destPath="d://nginx//cae//resource//pdf";
+	public static final String destPath="D:/nginx-1.12.0/html/aqours";
 	public static final Charset charset=Charset.forName("gbk");
 	private Logger logger=Logger.getLogger(this.getClass().getName());
 	

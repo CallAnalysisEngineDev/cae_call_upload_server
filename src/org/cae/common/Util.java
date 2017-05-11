@@ -1,6 +1,8 @@
 package org.cae.common;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,7 +23,7 @@ public class Util {
 
 	private static SimpleDateFormat dateSdf=new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat timeSdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	public static final String destPath="d://nginx//cae//resource//pdf";
+	public static final String destPath="D:\\nginx-1.12.0\\html\\aqours";
 	public static final Charset charset=Charset.forName("gbk");
 	
 	public static String toJson(Object target){
@@ -111,7 +113,7 @@ public class Util {
 			File file = new File(tempName);
 			String fileName=file.getName().trim();//文件名
 			String filePath=destPath+File.separator+fileName;//真正的文件路径
-			if((!tempName.endsWith(".pdf"))||new File(tempName).isDirectory()){
+			if((!tempName.endsWith(".html"))||new File(tempName).isDirectory()){
             	continue;
             }
 			songName.add(fileName.substring(0, fileName.lastIndexOf(".")));
@@ -127,6 +129,7 @@ public class Util {
 		zipInputStream.close();
 		return songName;
 	}catch (Exception e) {
+		e.printStackTrace();
 		return new ArrayList<>();
 	}
 	}

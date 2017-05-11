@@ -22,7 +22,7 @@ public class IUploadControllerImpl implements IUploadController{
 	@Override
 	@ResponseBody
 	@RequestMapping(value="/upload",method=RequestMethod.POST)
-	public Map<String,Object> uploadCallController(CommonsMultipartFile file){
+	public Map<String,Object> uploadCallController(@RequestParam("file") CommonsMultipartFile file){
 	try{
 		ServiceResult result =uploadService.uploadCallService(file.getInputStream());
 		return result.toMap();

@@ -37,7 +37,6 @@ public class CallDaoImpl implements ICallDao{
 			template.batchUpdate(sql, batchArgs);
 			return new DaoResult(true,null);
 		} catch (Exception ex) {
-			// TODO: handle exception
 			ex.printStackTrace();
 			return null;
 		}
