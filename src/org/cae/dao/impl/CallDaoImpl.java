@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import org.cae.common.DaoResult;
-import org.cae.common.Util;
 import org.cae.dao.ICallDao;
 @Repository("callDao")
 public class CallDaoImpl implements ICallDao{

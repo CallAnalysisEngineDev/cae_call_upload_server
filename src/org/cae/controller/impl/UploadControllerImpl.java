@@ -1,8 +1,5 @@
 package org.cae.controller.impl;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 import org.cae.common.ServiceResult;
@@ -16,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 @Controller("uploadController")
-public class IUploadControllerImpl implements IUploadController{
+public class UploadControllerImpl implements IUploadController{
 	@Autowired
 	private IUploadService uploadService;
 	@Override
