@@ -7,4 +7,6 @@ import org.cae.common.ServiceResult;
 public interface IUploadService {
 
 	ServiceResult uploadCallService(InputStream input);
+	
+	InputStream downloadCallService();
 }

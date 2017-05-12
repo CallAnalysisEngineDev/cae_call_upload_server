@@ -14,8 +14,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository("songDao")
 public class SongDaoImpl implements ISongDao{
+	
 	@Autowired
 	private JdbcTemplate template;
+	
 	@Override
 	public DaoResult updateSongTimeDao(final List<String> songNames){
 		try {

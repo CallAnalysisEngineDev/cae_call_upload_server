@@ -1,9 +1,7 @@
 package org.cae.service.impl;
 
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
@@ -14,11 +12,11 @@ import org.cae.service.IUploadService;
 import org.springframework.stereotype.Service;
 
 import org.cae.common.Util;
+
 @Service("uploadService")
 public class UploadServiceImpl implements IUploadService{
+	
 	public static final String destPath="D:/nginx-1.12.0/html/aqours";
-	public static final Charset charset=Charset.forName("gbk");
-	private Logger logger=Logger.getLogger(this.getClass().getName());
 	
 	@Resource(name="callDao")
 	private ICallDao callDao;
@@ -44,6 +42,12 @@ public class UploadServiceImpl implements IUploadService{
 				result.setErrInfo("数据库更新失败");
 			}
 		return result;
+	}
+
+	@Override
+	public InputStream downloadCallService() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
