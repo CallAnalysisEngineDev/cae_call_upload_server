@@ -1,5 +1,8 @@
 package org.cae.controller.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +38,21 @@ public class UploadControllerImpl implements IUploadController{
 	}
 	
 	@Override
+	@ResponseBody
+	@RequestMapping(value="/download",method=RequestMethod.POST)
 	public void downloadCallController(HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
+	try {
+		byte[]buffer = new byte[1024];
+		int len;
+		InputStream inputStream =uploadService.downloadCallService();
+		OutputStream outputStream =response.getOutputStream();
+		while((len=inputStream.read(buffer))>0){
+			outputStream.write(buffer);
+		}
+		inputStream.close();
+		outputStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
