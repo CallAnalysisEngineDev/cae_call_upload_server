@@ -1,5 +1,7 @@
 package org.cae.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import org.cae.dao.ICallDao;
 import org.cae.dao.ISongDao;
 import org.cae.service.IUploadService;
 import org.springframework.stereotype.Service;
+
+import com.github.junrar.rarfile.FileHeader;
 
 import org.cae.common.Util;
 
@@ -46,8 +50,14 @@ public class UploadServiceImpl implements IUploadService{
 
 	@Override
 	public InputStream downloadCallService() {
-		// TODO Auto-generated method stub
-		return null;
+		InputStream inputStream=null;
+		try {
+			Util.ZipFiles("D:\\test\\a.zip","","D:\\nginx\\cae\\resource\\html");
+			inputStream=new FileInputStream(new File("D:\\test\\a.zip"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return inputStream;
 	}
 
 
