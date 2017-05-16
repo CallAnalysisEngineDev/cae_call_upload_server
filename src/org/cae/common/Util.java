@@ -158,9 +158,6 @@ public class Util {
  */
 	public static void ZipFiles(ZipOutputStream out,String base,File[] srcFiles){ 
         base = base.replaceAll("\\*", "/"); 
-        if(!base.endsWith("/")){ 
-            base+="/"; 
-        } 
         byte[] buf = new byte[1024]; 
         try { 
             for(int i=0;i<srcFiles.length;i++){ 
