@@ -1,7 +1,6 @@
 package org.cae.service.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -13,14 +12,10 @@ import org.cae.dao.ISongDao;
 import org.cae.service.IUploadService;
 import org.springframework.stereotype.Service;
 
-import com.github.junrar.rarfile.FileHeader;
-
 import org.cae.common.Util;
 
 @Service("uploadService")
 public class UploadServiceImpl implements IUploadService{
-	
-	public static final String destPath="D:/nginx-1.12.0/html/aqours";
 	
 	@Resource(name="callDao")
 	private ICallDao callDao;
@@ -49,15 +44,15 @@ public class UploadServiceImpl implements IUploadService{
 	}
 
 	@Override
-	public InputStream downloadCallService() {
-		InputStream inputStream=null;
+	public File downloadCallService() {
+		File file=null;
 		try {
-			Util.ZipFiles("D:\\test\\a.zip","","D:\\nginx\\cae\\resource\\html");
-			inputStream=new FileInputStream(new File("D:\\test\\a.zip"));
+			Util.ZipFiles(DOWNLOAD_ZIP_PATH,"",DOWNLOAD_HTML_PATH);
+			file=new File(DOWNLOAD_ZIP_PATH);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return inputStream;
+		return file;
 	}
 
 

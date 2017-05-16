@@ -1,8 +1,12 @@
 package org.cae.controller.impl;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLConnection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +16,7 @@ import org.cae.controller.IUploadController;
 import org.cae.service.IUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,18 +44,17 @@ public class UploadControllerImpl implements IUploadController{
 	
 	@Override
 	@ResponseBody
-	@RequestMapping(value="/download",method=RequestMethod.POST)
+	@RequestMapping(value="/download",method=RequestMethod.GET)
 	public void downloadCallController(HttpServletResponse response) {
 	try {
-		byte[]buffer = new byte[1024];
-		int len;
-		InputStream inputStream =uploadService.downloadCallService();
-		OutputStream outputStream =response.getOutputStream();
-		while((len=inputStream.read(buffer))>0){
-			outputStream.write(buffer);
-		}
-		inputStream.close();
-		outputStream.close();
+		File file =uploadService.downloadCallService();
+		String contentType=URLConnection.guessContentTypeFromName(file.getName());
+		response.setContentType(contentType);
+		response.setContentLength((int)file.length());
+		response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() +"\""));
+		InputStream inputStream=new BufferedInputStream(new FileInputStream(file));
+		FileCopyUtils.copy(inputStream, response.getOutputStream());
+		new File(IUploadService.DOWNLOAD_ZIP_PATH).delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
