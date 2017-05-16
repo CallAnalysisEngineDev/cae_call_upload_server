@@ -7,9 +7,11 @@ import org.cae.common.ServiceResult;
 
 public interface IUploadService {
 
+	//下载时call表压缩后的输出路径
 	final static String DOWNLOAD_ZIP_PATH = "result.zip";
 	
-	final static String DOWNLOAD_HTML_PATH = "D:\\nginx-1.12.0\\html\\aqours";
+	//call表在nginx下的文件夹路径
+	final static String DOWNLOAD_HTML_PATH = "D:\\nginx-1.12.0\\cae\\resource\\html\\aqours";
 	
 	ServiceResult uploadCallService(InputStream input);
 	
