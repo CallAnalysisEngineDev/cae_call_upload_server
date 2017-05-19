@@ -17,6 +17,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.log4j.Logger;
+import org.cae.service.IUploadService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,7 +25,6 @@ public class Util {
 
 	private static SimpleDateFormat dateSdf=new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat timeSdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	public static final String destPath="D:\\nginx-1.12.0\\html\\aqours";
 	public static final Charset charset=Charset.forName("gbk");
     public static final byte[] buf = new byte[1024];
 	public static String toJson(Object target){
@@ -114,10 +114,10 @@ public class Util {
 		List<String> songName =new ArrayList<>();
 	try{
 		while((entry=zipInputStream.getNextEntry()) != null){
-			String tempName = (destPath+File.separator+entry.getName());//临时路径
+			String tempName = (IUploadService.DOWNLOAD_HTML_PATH+File.separator+entry.getName());//临时路径
 			File file = new File(tempName);
 			String fileName=file.getName().trim();//文件名
-			String filePath=destPath+File.separator+fileName;//真正的文件路径
+			String filePath=IUploadService.DOWNLOAD_HTML_PATH+File.separator+fileName;//真正的文件路径
 			if((!tempName.endsWith(".html"))||new File(tempName).isDirectory()){
             	continue;
             }
