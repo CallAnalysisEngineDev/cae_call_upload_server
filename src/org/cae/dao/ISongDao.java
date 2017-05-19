@@ -2,7 +2,9 @@ package org.cae.dao;
 
 import java.util.List;
 
+import org.cae.common.DaoResult;
+
 public interface ISongDao {
 
-	List<String> updateSongTimeDao(List<String> songNames);
+	DaoResult<String> updateSongTimeDao(List<String> songNames);
 }

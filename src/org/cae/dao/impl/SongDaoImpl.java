@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cae.common.DaoResult;
 import org.cae.common.Util;
 import org.cae.dao.ISongDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,13 @@ public class SongDaoImpl implements ISongDao{
 	private JdbcTemplate template;
 	
 	@Override
-	public List<String> updateSongTimeDao(final List<String> songNames){
+	public DaoResult<String> updateSongTimeDao(final List<String> songNames){
+		DaoResult<String> theResult=null;
 		try {
 			String sql="UPDATE song "
 					+ "SET song_last_modify_time = ? "
 					+ "WHERE song_name = ? ";
-			template.batchUpdate(sql, new BatchPreparedStatementSetter(){
+			int[] result=template.batchUpdate(sql, new BatchPreparedStatementSetter(){
 				@Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {  
 					ps.setString(1, Util.getNowDate());
@@ -38,6 +40,12 @@ public class SongDaoImpl implements ISongDao{
 					return songNames.size();
 				}   
 			});
+			List<String> failList=new ArrayList<String>();
+			for(int i=0;i<result.length;i++){
+				if(result[i]==0){
+					failList.add(songNames.get(i));
+				}
+			}
 			sql="SELECT song_id "
 				+ "FROM song "
 				+ "WHERE song_name IN(";
@@ -49,8 +57,8 @@ public class SongDaoImpl implements ISongDao{
 					sql+="?,";
 				}
 			}
-			List<String> theResult=new ArrayList<String>();
-			theResult=template.query(sql, songNames.toArray(), new RowMapper<String>(){
+			List<String> list=new ArrayList<String>();
+			list=template.query(sql, songNames.toArray(), new RowMapper<String>(){
 
 				@Override
 				public String mapRow(ResultSet rs, int row)
@@ -59,8 +67,16 @@ public class SongDaoImpl implements ISongDao{
 				}
 				
 			});
+			if(failList.size()==0){
+				theResult=new DaoResult<String>(true, list);
+			}
+			else{
+				theResult=new DaoResult<String>(false, list, failList);
+				theResult.setErrInfo("没有找到部分歌曲");
+			}
 			return theResult;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

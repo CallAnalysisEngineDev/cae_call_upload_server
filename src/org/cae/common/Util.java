@@ -102,11 +102,12 @@ public class Util {
 		}
 		logger.error(stackInfo);
 	}
-/**
- * 			解压文件
- * @param in文件输入流
- * @return	解压的文件名集合
- */
+	
+	/**
+	 * 			解压文件
+	 * @param in文件输入流
+	 * @return	解压的文件名集合
+	 */
 	public  static List<String> unZip(InputStream in){
 
 		ZipInputStream zipInputStream = new ZipInputStream(in,charset);
@@ -137,25 +138,27 @@ public class Util {
 		return new ArrayList<>();
 	}
 	}
-/**
- * 		压缩文件
- * @param zip 生成的Zip文件名
- * @param base	压入Zip的目录，默认为根目录
- * @param filePath 	压缩的文件路径
- * @throws IOException
- */
+	
+	/**
+	 * 		压缩文件
+	 * @param zip 生成的Zip文件名
+	 * @param base	压入Zip的目录，默认为根目录
+	 * @param filePath 	压缩的文件路径
+	 * @throws IOException
+	 */
 	public static void ZipFiles(String zip,String base,String filePath) throws IOException{ 
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip)); 
         File[] srcFiles=new File(filePath).listFiles();
         ZipFiles(out,base,srcFiles); 
         out.close(); 
     } 
-/**
- *  压缩文件(原始方法)
- * @param out	压缩输出流
- * @param base	压入Zip的目录，默认为根目录
- * @param srcFiles	压缩的文件路径
- */
+	
+	/**
+	 *  压缩文件(原始方法)
+	 * @param out	压缩输出流
+	 * @param base	压入Zip的目录，默认为根目录
+	 * @param srcFiles	压缩的文件路径
+	 */
 	public static void ZipFiles(ZipOutputStream out,String base,File[] srcFiles){ 
         base = base.replaceAll("\\*", "/"); 
         byte[] buf = new byte[1024]; 
@@ -186,5 +189,13 @@ public class Util {
             e.printStackTrace(); 
         } 
     } 
+	
+	public static void deleteFiles(List<String> filenames){
+		File file;
+		for(String filename:filenames){
+			file=new File(IUploadService.DOWNLOAD_HTML_PATH+"\\"+filename+".html");
+			file.delete();
+		}
+	}
 
 }

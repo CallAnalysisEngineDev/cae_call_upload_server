@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.cae.common.DaoResult;
 import org.cae.common.ServiceResult;
 import org.cae.dao.ICallDao;
 import org.cae.dao.ISongDao;
@@ -25,22 +26,19 @@ public class UploadServiceImpl implements IUploadService{
 	@Override
 	public ServiceResult uploadCallService(InputStream input, CallRecord callRecord){
 		ServiceResult result=null;
-			List<String> songName=Util.unZip(input);
-			if(songName.size()==0){
-				result=new ServiceResult();
-				result.setSuccessed(false);
-				result.setErrInfo("文件解压失败");
-			}
-			List<String> songIds=songDao.updateSongTimeDao(songName);
-			if(songIds!=null&&songIds.size()!=0
-				&&callDao.updateCallVersionDao(songIds,callRecord).isResult()){
-					result=new ServiceResult();
-					result.setSuccessed(true);
-			}else{
-				result=new ServiceResult();
-				result.setSuccessed(false);
-				result.setErrInfo("数据库更新失败");
-			}
+		List<String> songName=Util.unZip(input);
+		if(songName.size()==0){
+			result=new ServiceResult();
+			result.setSuccessed(false);
+			result.setErrInfo("文件解压失败");
+			return result;
+		}
+		DaoResult<String> daoResult=songDao.updateSongTimeDao(songName);
+		if(daoResult.getFailList().size()>0){
+			Util.deleteFiles(daoResult.getFailList());
+		}
+		result=new ServiceResult(daoResult);
+		callDao.updateCallVersionDao(daoResult.getResult(),callRecord);
 		return result;
 	}
 

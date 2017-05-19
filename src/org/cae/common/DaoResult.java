@@ -1,18 +1,40 @@
 package org.cae.common;
 
-public class DaoResult {
+import java.util.List;
 
-	private boolean result;
+public class DaoResult<T> {
+
+	private boolean successed;
+	private List<T> result;
+	private List<T> failList;
 	private String errInfo;
-	public DaoResult(boolean result,String errInfo){
+	
+	public DaoResult(boolean successed,List<T> result){
+		this.successed=successed;
 		this.result=result;
-		this.errInfo=errInfo;
 	}
-	public boolean isResult() {
+	public DaoResult(boolean successed,List<T> result,List<T> failList){
+		this.successed=successed;
+		this.result=result;
+		this.failList=failList;
+	}
+	public boolean isSuccessed() {
+		return successed;
+	}
+	public void setSuccessed(boolean successed) {
+		this.successed = successed;
+	}
+	public List<T> getResult() {
 		return result;
 	}
-	public void setResult(boolean result) {
+	public void setResult(List<T> result) {
 		this.result = result;
+	}
+	public List<T> getFailList() {
+		return failList;
+	}
+	public void setFailList(List<T> failList) {
+		this.failList = failList;
 	}
 	public String getErrInfo() {
 		return errInfo;

@@ -14,8 +14,11 @@ public class ServiceResult {
 	private Map<String,Object> extraInfo;
 	public ServiceResult(){}
 	public ServiceResult(DaoResult daoResult){
-		this.successed=daoResult.isResult();
+		this.successed=daoResult.isSuccessed();
 		this.errInfo=daoResult.getErrInfo();
+		if(!this.successed){
+			this.result=daoResult.getFailList();
+		}
 	}
 	public boolean isSuccessed() {
 		return successed;
@@ -97,6 +100,7 @@ public class ServiceResult {
 		else{
 			theResult.put("successed", this.successed);
 			theResult.put("errInfo", this.errInfo);
+			theResult.put("failList", this.result);
 		}
 		return theResult;
 	}
