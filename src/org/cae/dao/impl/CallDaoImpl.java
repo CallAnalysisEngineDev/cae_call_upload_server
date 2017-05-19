@@ -1,15 +1,16 @@
 package org.cae.dao.impl;
 
-import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
-
 import org.cae.common.DaoResult;
 import org.cae.dao.ICallDao;
+import org.cae.entity.CallRecord;
 
 @Repository("callDao")
 public class CallDaoImpl implements ICallDao{
@@ -18,24 +19,29 @@ public class CallDaoImpl implements ICallDao{
 	private JdbcTemplate template;
 	
 	@Override
-	public DaoResult updateCallVersionDao(List<String> songNames){
+	public DaoResult updateCallVersionDao(final List<String> songIds, final CallRecord callRecord){
 		try {
-			 String max_sql="SELECT MAX(call_version) AS max_version "
-			 			+ "FROM call_record ";
-				List<Map<String,Object>> max =template.queryForList(max_sql);
-				Integer max_version =(Integer) max.get(0).get("max_version")+1;
 			String sql="UPDATE call_record "
-					 + "LEFT JOIN song "
-					 + "USING(song_id) "
-					 + "SET call_version = "+max_version+" "
-					 + "WHERE song_name IN(?) ";
-			List<Object[]> batchArgs=new ArrayList<Object[]>();
-			for(int i=0;i<songNames.size();i++){
-				Object[] objectArray=new Object[1];
-				objectArray[0]=songNames.get(i);
-				batchArgs.add(objectArray);
+						+ "SET call_version = ? "
+						+ "WHERE song_id IN (";
+			for(int i=0;i<songIds.size();i++){
+				if(i==songIds.size()-1){
+					sql+="?)";
+				}
+				else{
+					sql+="?,";
+				}
 			}
-			template.batchUpdate(sql, batchArgs);
+			template.update(sql, new PreparedStatementSetter() {
+				
+				@Override
+				public void setValues(PreparedStatement ps) throws SQLException {
+					ps.setShort(1, callRecord.getCallVersion());
+					for(int i=2;i<=songIds.size()+1;i++){
+						ps.setString(i, songIds.get(i-2));
+					}
+				}
+			});
 			return new DaoResult(true,null);
 		} catch (Exception ex) {
 			ex.printStackTrace();

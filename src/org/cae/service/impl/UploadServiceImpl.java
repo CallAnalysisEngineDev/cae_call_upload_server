@@ -9,9 +9,9 @@ import javax.annotation.Resource;
 import org.cae.common.ServiceResult;
 import org.cae.dao.ICallDao;
 import org.cae.dao.ISongDao;
+import org.cae.entity.CallRecord;
 import org.cae.service.IUploadService;
 import org.springframework.stereotype.Service;
-
 import org.cae.common.Util;
 
 @Service("uploadService")
@@ -23,7 +23,7 @@ public class UploadServiceImpl implements IUploadService{
 	private ISongDao songDao;
 	
 	@Override
-	public ServiceResult uploadCallService(InputStream input){
+	public ServiceResult uploadCallService(InputStream input, CallRecord callRecord){
 		ServiceResult result=null;
 			List<String> songName=Util.unZip(input);
 			if(songName.size()==0){
@@ -31,8 +31,9 @@ public class UploadServiceImpl implements IUploadService{
 				result.setSuccessed(false);
 				result.setErrInfo("文件解压失败");
 			}
-			if(songDao.updateSongTimeDao(songName).isResult()
-					&&callDao.updateCallVersionDao(songName).isResult()){
+			List<String> songIds=songDao.updateSongTimeDao(songName);
+			if(songIds!=null&&songIds.size()!=0
+				&&callDao.updateCallVersionDao(songIds,callRecord).isResult()){
 					result=new ServiceResult();
 					result.setSuccessed(true);
 			}else{

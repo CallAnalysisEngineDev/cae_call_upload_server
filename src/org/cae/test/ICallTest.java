@@ -27,16 +27,5 @@ public class ICallTest {
 		template=(JdbcTemplate)ctx.getBean("jdbcTemplate");
 
 	}
-	public void test2(){
-	}
-	@Test
-	public void test3(){
-		List<String> songName=new ArrayList<>();
-		songName.add("トリコリコPLEASE!!");
-		songName.add("LONELY TUNING");
-		songName.add("夜空はなんでも知ってるの");
-		songName.add("Aqours☆HEROES");
-		DaoResult daoResult =callDao.updateCallVersionDao(songName);
-	}
 
 }

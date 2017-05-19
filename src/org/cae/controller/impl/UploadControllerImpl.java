@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.cae.common.ServiceResult;
 import org.cae.controller.IUploadController;
+import org.cae.entity.CallRecord;
 import org.cae.service.IUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,9 +32,9 @@ public class UploadControllerImpl implements IUploadController{
 	@Override
 	@ResponseBody
 	@RequestMapping(value="/upload",method=RequestMethod.POST)
-	public Map<String,Object> uploadCallController(@RequestParam("file") CommonsMultipartFile file){
+	public Map<String,Object> uploadCallController(@RequestParam("file") CommonsMultipartFile file,CallRecord callRecord){
 		try{
-			ServiceResult result =uploadService.uploadCallService(file.getInputStream());
+			ServiceResult result =uploadService.uploadCallService(file.getInputStream(),callRecord);
 			return result.toMap();
 		}catch (Exception e) {
 			e.printStackTrace();
