@@ -34,11 +34,11 @@ public class UploadServiceImpl implements IUploadService{
 			return result;
 		}
 		DaoResult<String> daoResult=songDao.updateSongTimeDao(songName);
-		if(daoResult.getFailList().size()>0){
+		if(daoResult.getFailList()!=null&&daoResult.getFailList().size()>0){
 			Util.deleteFiles(daoResult.getFailList());
 		}
-		result=new ServiceResult(daoResult);
 		callDao.updateCallVersionDao(daoResult.getResult(),callRecord);
+		result=new ServiceResult(daoResult);
 		return result;
 	}
 
