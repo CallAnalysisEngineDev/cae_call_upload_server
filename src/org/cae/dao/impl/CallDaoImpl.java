@@ -1,27 +1,27 @@
 package org.cae.dao.impl;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.apache.log4j.Logger;
 import org.cae.common.DaoResult;
 import org.cae.common.Util;
 import org.cae.dao.ICallDao;
+import org.cae.dao.ISongDao;
 import org.cae.entity.CallRecord;
 import org.cae.entity.Song;
 
 @Repository("callDao")
 public class CallDaoImpl implements ICallDao{
 	
+	@Autowired
+	private ISongDao songDao;
 	private Logger logger=Logger.getLogger(getClass());
 	
 	//call_record表中call_source字段的水团call表固定前缀
@@ -36,6 +36,8 @@ public class CallDaoImpl implements ICallDao{
 			String sql="UPDATE call_record "
 						+ "SET call_version = ? "
 						+ "WHERE song_id = ?";
+			//result数组代表每条sql的影响条数,如果更新成功的话对应位置的值应该是1
+			//如果是0的话就说明0行被影响,这里就可以等同于“有歌曲信息但是之前没有录入call_record记录”
 			int[] result=template.batchUpdate(sql, new BatchPreparedStatementSetter(){
 				@Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {  
@@ -48,6 +50,7 @@ public class CallDaoImpl implements ICallDao{
 					return songIds.size();
 				}   
 			});
+			//将“有歌曲信息但是之前没有录入call_record记录”的名单记录下来,然后添加到call_record表中
 			List<String> failList=new ArrayList<String>();
 			for(int i=0;i<result.length;i++){
 				if(result[i]==0){
@@ -56,7 +59,7 @@ public class CallDaoImpl implements ICallDao{
 			}
 			if(failList.size()>0){
 				String warnInfo="有一些歌曲只有歌曲信息没有具体的call表信息,名单如下:[";
-				List<Song> songs=getSongById(failList);
+				List<Song> songs=songDao.getSongNameById(failList);
 				for(int i=0;i<songs.size();i++){
 					if(i==songs.size()-1){
 						warnInfo+=songs.get(i).getSongName()+"]";
@@ -75,32 +78,6 @@ public class CallDaoImpl implements ICallDao{
 			ex.printStackTrace();
 			return null;
 		}
-	}
-	
-	private List<Song> getSongById(final List<String> songIds){
-		String sql="SELECT song_name "
-				+ "FROM song "
-				+ "WHERE song_id IN(";
-		for(int i=0;i<songIds.size();i++){
-			if(i==songIds.size()-1){
-				sql+="?)";
-			}
-			else{
-				sql+="?,";
-			}
-		}
-		//对songIds进行排序,以便与rowmapper中的ResultSet中的歌名一一对应
-		Collections.sort(songIds);
-		return template.query(sql, songIds.toArray(), new RowMapper<Song>(){
-
-			@Override
-			public Song mapRow(ResultSet rs, int row) throws SQLException {
-				Song song=new Song(songIds.get(row));
-				song.setSongName(rs.getString("song_name"));
-				return song;
-			}
-			
-		});
 	}
 	
 	private void saveCallDao(final List<Song> songs, final CallRecord callRecord){
