@@ -62,7 +62,7 @@ public class CallDaoImpl implements ICallDao{
 				List<Song> songs=songDao.getSongNameById(failList);
 				for(int i=0;i<songs.size();i++){
 					if(i==songs.size()-1){
-						warnInfo+=songs.get(i).getSongName()+"]";
+						warnInfo+=songs.get(i).getSongName();
 					}
 					else{
 						warnInfo+=songs.get(i).getSongName()+",";
