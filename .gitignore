@@ -1,4 +1,6 @@
 *.class
+WebRoot/WEB-INF/classes
+WebRoot/WEB-INF/lib
 /.settings
 
 # Mobile Tools for Java (J2ME)
