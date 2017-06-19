@@ -13,7 +13,7 @@ import org.cae.dao.ISongDao;
 import org.cae.entity.CallRecord;
 import org.cae.service.IUploadService;
 import org.springframework.stereotype.Service;
-import org.cae.common.Util;
+import static org.cae.common.Util.*;
 
 @Service("uploadService")
 public class UploadServiceImpl implements IUploadService{
@@ -26,7 +26,7 @@ public class UploadServiceImpl implements IUploadService{
 	@Override
 	public ServiceResult uploadCallService(InputStream input, CallRecord callRecord){
 		ServiceResult result=null;
-		List<String> songName=Util.unZip(input);
+		List<String> songName=unZip(input);
 		if(songName.size()==0){
 			result=new ServiceResult();
 			result.setSuccessed(false);
@@ -45,7 +45,7 @@ public class UploadServiceImpl implements IUploadService{
 			 * 因为之前解压的时候无论数据库是否存在歌曲都把html解压了
 			 * 所以需要把那些不存在的歌曲的html文件都删掉
 			 */
-			Util.deleteFiles(daoResult.getFailList());
+			deleteFiles(daoResult.getFailList());
 		}
 		//只有存在歌曲信息的歌曲才会传入该方法,进行call_record表版本号的更新
 		callDao.updateCallVersionDao(daoResult.getResult(),callRecord);
@@ -57,7 +57,7 @@ public class UploadServiceImpl implements IUploadService{
 	public File downloadCallService() {
 		File file=null;
 		try {
-			Util.ZipFiles(DOWNLOAD_ZIP_PATH,"",DOWNLOAD_HTML_PATH);
+			ZipFiles(DOWNLOAD_ZIP_PATH,"",DOWNLOAD_HTML_PATH);
 			file=new File(DOWNLOAD_ZIP_PATH);
 		} catch (Exception e) {
 			e.printStackTrace();

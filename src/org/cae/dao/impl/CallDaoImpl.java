@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.apache.log4j.Logger;
 import org.cae.common.DaoResult;
-import org.cae.common.Util;
+import static org.cae.common.Util.getCharId;
 import org.cae.dao.ICallDao;
 import org.cae.dao.ISongDao;
 import org.cae.entity.CallRecord;
@@ -88,7 +88,7 @@ public class CallDaoImpl implements ICallDao{
 			@Override
 			public void setValues(PreparedStatement ps, int count) throws SQLException {
 				Song song=songs.get(count);
-				ps.setString(1, Util.getCharId("CR-", 10));
+				ps.setString(1, getCharId("CR-", 10));
 				ps.setString(2, song.getSongId());
 				ps.setString(3, CALL_SOURCE_PREFIX+song.getSongName()+".html");
 				ps.setShort(4, callRecord.getCallVersion());

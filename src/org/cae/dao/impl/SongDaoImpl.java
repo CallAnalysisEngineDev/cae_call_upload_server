@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.cae.common.DaoResult;
-import org.cae.common.Util;
+import static org.cae.common.Util.getNowDate;
 import org.cae.dao.ISongDao;
 import org.cae.entity.Song;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class SongDaoImpl implements ISongDao{
 			int[] result=template.batchUpdate(sql, new BatchPreparedStatementSetter(){
 				@Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {  
-					ps.setString(1, Util.getNowDate());
+					ps.setString(1, getNowDate());
 					ps.setString(2, songNames.get(i).trim());
                 }
 
