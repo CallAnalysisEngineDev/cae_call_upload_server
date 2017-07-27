@@ -24,37 +24,43 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Controller("uploadController")
-public class UploadControllerImpl implements IUploadController{
-	
+public class UploadControllerImpl implements IUploadController {
+
 	@Autowired
 	private IUploadService uploadService;
-	
+
 	@Override
 	@ResponseBody
-	@RequestMapping(value="/upload",method=RequestMethod.POST)
-	public Map<String,Object> uploadCallController(@RequestParam("file") CommonsMultipartFile file,CallRecord callRecord){
-		try{
-			ServiceResult result =uploadService.uploadCallService(file.getInputStream(),callRecord);
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public Map<String, Object> uploadCallController(
+			@RequestParam("file") CommonsMultipartFile file,
+			CallRecord callRecord) {
+		try {
+			ServiceResult result = uploadService.uploadCallService(
+					file.getInputStream(), callRecord);
 			return result.toMap();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	@Override
 	@ResponseBody
-	@RequestMapping(value="/download",method=RequestMethod.GET)
+	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public void downloadCallController(HttpServletResponse response) {
-	try {
-		File file =uploadService.downloadCallService();
-		String contentType=URLConnection.guessContentTypeFromName(file.getName());
-		response.setContentType(contentType);
-		response.setContentLength((int)file.length());
-		response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() +"\""));
-		InputStream inputStream=new BufferedInputStream(new FileInputStream(file));
-		FileCopyUtils.copy(inputStream, response.getOutputStream());
-		new File(IUploadService.DOWNLOAD_ZIP_PATH).delete();
+		try {
+			File file = uploadService.downloadCallService();
+			String contentType = URLConnection.guessContentTypeFromName(file
+					.getName());
+			response.setContentType(contentType);
+			response.setContentLength((int) file.length());
+			response.setHeader("Content-Disposition", String
+					.format("inline; filename=\"" + file.getName() + "\""));
+			InputStream inputStream = new BufferedInputStream(
+					new FileInputStream(file));
+			FileCopyUtils.copy(inputStream, response.getOutputStream());
+			new File(IUploadService.DOWNLOAD_ZIP_PATH).delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

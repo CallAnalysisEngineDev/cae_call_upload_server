@@ -7,5 +7,6 @@ import org.cae.entity.CallRecord;
 
 public interface ICallDao {
 
-	DaoResult<CallRecord> updateCallVersionDao(List<String> songIds, CallRecord callRecord);
+	DaoResult<CallRecord> updateCallVersionDao(List<String> songIds,
+			CallRecord callRecord);
 }

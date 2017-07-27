@@ -1,10 +1,10 @@
 package org.cae.entity;
 
-import static org.cae.common.Util.toJson;;
+import static org.cae.common.Util.toJson;
 
 public class Entity {
 
-	public String toString(){
+	public String toString() {
 		return toJson(this);
 	}
 }

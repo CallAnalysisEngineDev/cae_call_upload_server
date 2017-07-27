@@ -8,13 +8,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class UploadTest {
-	
+
 	private IUploadService service;
-	
+
 	@SuppressWarnings("resource")
 	@Before
-	public void init(){
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		service=(IUploadService)ctx.getBean("uploadService");
+	public void init() {
+		ApplicationContext ctx = new ClassPathXmlApplicationContext(
+				"applicationContext.xml");
+		service = (IUploadService) ctx.getBean("uploadService");
 	}
 }
