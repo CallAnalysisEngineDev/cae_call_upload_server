@@ -76,7 +76,7 @@ public class CallDaoImpl implements ICallDao {
 			}
 			return new DaoResult<CallRecord>(true, null);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 			return null;
 		}
 	}

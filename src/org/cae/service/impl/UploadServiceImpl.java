@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.cae.common.DaoResult;
 import org.cae.common.ServiceResult;
 import org.cae.dao.ICallDao;
@@ -13,11 +14,13 @@ import org.cae.dao.ISongDao;
 import org.cae.entity.CallRecord;
 import org.cae.service.IUploadService;
 import org.springframework.stereotype.Service;
+
 import static org.cae.common.Util.*;
 
 @Service("uploadService")
 public class UploadServiceImpl implements IUploadService {
 
+	private Logger logger = Logger.getLogger(getClass());
 	@Resource(name = "callDao")
 	private ICallDao callDao;
 	@Resource(name = "songDao")
@@ -60,7 +63,7 @@ public class UploadServiceImpl implements IUploadService {
 			ZipFiles(DOWNLOAD_ZIP_PATH, "", DOWNLOAD_HTML_PATH);
 			file = new File(DOWNLOAD_ZIP_PATH);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return file;
 	}

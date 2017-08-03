@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.cae.common.DaoResult;
+
 import static org.cae.common.Util.getNowDate;
+
 import org.cae.dao.ISongDao;
 import org.cae.entity.Song;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Repository;
 @Repository("songDao")
 public class SongDaoImpl implements ISongDao {
 
+	private Logger logger = Logger.getLogger(getClass());
 	@Autowired
 	private JdbcTemplate template;
 
@@ -82,7 +86,7 @@ public class SongDaoImpl implements ISongDao {
 			}
 			return theResult;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			return null;
 		}
 	}

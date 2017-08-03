@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Util {
 
+	private static Logger logger = Logger.getLogger(Util.class);
 	private static SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat timeSdf = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
@@ -95,15 +96,6 @@ public class Util {
 				result = false;
 		}
 		return result;
-	}
-
-	public static void logStackTrace(Logger logger,
-			StackTraceElement[] stackTrace) {
-		String stackInfo = "";
-		for (StackTraceElement element : stackTrace) {
-			stackInfo += element + "\n";
-		}
-		logger.error(stackInfo);
 	}
 
 	/**
