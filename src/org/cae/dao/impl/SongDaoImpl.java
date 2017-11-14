@@ -1,10 +1,8 @@
 package org.cae.dao.impl;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -17,7 +15,6 @@ import org.cae.entity.Song;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository("songDao")
@@ -68,16 +65,7 @@ public class SongDaoImpl implements ISongDao {
 				}
 			}
 			List<String> list = new ArrayList<String>();
-			list = template.query(sql, songNames.toArray(),
-					new RowMapper<String>() {
-
-						@Override
-						public String mapRow(ResultSet rs, int row)
-								throws SQLException {
-							return rs.getString("song_id");
-						}
-
-					});
+			list = template.query(sql, songNames.toArray(),(rs,row)->rs.getString("song_id"));
 			if (failList.size() == 0) {
 				theResult = new DaoResult<String>(true, list);
 			} else {
@@ -102,16 +90,10 @@ public class SongDaoImpl implements ISongDao {
 			}
 		}
 		// 对songIds进行排序,以便与rowmapper中的ResultSet中的歌名一一对应
-		Collections.sort(songIds);
-		return template.query(sql, songIds.toArray(), new RowMapper<Song>() {
-
-			@Override
-			public Song mapRow(ResultSet rs, int row) throws SQLException {
-				Song song = new Song(songIds.get(row));
-				song.setSongName(rs.getString("song_name"));
-				return song;
-			}
-
+		return template.query(sql, songIds.stream().sorted().toArray(), (rs,row)->{
+			Song song = new Song(songIds.get(row));
+			song.setSongName(rs.getString("song_name"));
+			return song;
 		});
 	}
 }
